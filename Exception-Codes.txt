@@ -1,0 +1,7 @@
+- 411 : Username o Email già utilizzata
+- 412 : Un campo vuoto
+- 413 : Username <= 7
+- 414 : Password <= 7
+- 415 : 
+- 416 : 
+- 417 : Dati login errati
