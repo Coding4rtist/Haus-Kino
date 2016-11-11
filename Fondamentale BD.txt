@@ -1,0 +1,92 @@
+ [FK]
+ [PK]
+
+• CINEMA
+- ID [PK]
+- Nome
+- Via
+- Cap
+- Num Civico
+- Città
+- Cantone
+- Num Sale
+
+• TELEFONO
+- Numero [PK]
+- CodCinema [FK]
+
+• SALA
+- ID [PK]
+- Superficie
+- Capienza
+- CodCinema [FK]
+
+• POSTO
+- ID [PK]
+- NumFila
+- NumColonna
+- CodSala [FK]
+- Occupato
+
+• PALINSESTO
+- ID [PK]
+- Data
+- Ora
+- CodCinema [FK]
+- CodSala [FK]
+- CodFilm [FK]
+
+• PROGRAMMAZIONI
+- CodPalinsesto [PK] [FK]
+- CodFilm [PK] [FK]
+- Tipo
+
+• FILM IN PROGRAMMAZIONE
+- ID [PK]
+- Titolo
+- Recensione
+- Genere
+- Anno
+- Paese
+- Durata
+- Data Uscita
+- Distributore
+
+• ARTISTA
+- Nome [PK]
+- Cognome [PK]
+- Età
+- Attore
+- Regista
+
+• CASTING
+- CodFilm [PK] [FK]
+- NomeArtista [PK] [FK]
+- CognomeArtista [PK] [FK]
+- Ruolo
+
+• LOCAZIONI
+- CodSala [PK]
+- CodPalinsesto [PK]
+
+• PRENOTAZIONI
+- ID [PK]
+- Prezzo
+- 3D
+- Pagato
+- DataPrenotazione
+- CodUtente [FK]
+
+• POSTO SCELTO
+- ID [PK]
+- NumFila
+- Numcolonna
+- CodSala [FK]
+
+• UTENTE
+- ID [PK]
+- Username
+- Password
+- Email
+- Nome
+- Cognome
