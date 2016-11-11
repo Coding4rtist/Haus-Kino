@@ -1,3 +1,12 @@
+***** _SYSTEM_ *****
+
+CREATE TABLESPACE ts_cinema DATAFILE '[PATH]\cinemadbos.dbf' SIZE 150M;
+CREATE TABLESPACE ts_lob DATAFILE '[PATH]\reviewlob.dbf' SIZE 300M;
+
+CREATE USER cinemadba DEFAULT TABLESPACE ts_cinema IDENTIFIED BY 12345;
+GRANT DBA, UNLIMITED TABLESPACE TO cinemadba;
+
+***** _CINEMADBA_ *****
 
 CREATE TABLE CINEMA (
    id        NUMBER(2)    NOT NULL,
