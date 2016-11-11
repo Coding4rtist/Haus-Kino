@@ -1,34 +1,34 @@
  [FK]
  [PK]
 
-ï CINEMA
+‚Ä¢ CINEMA
 - ID [PK]
 - Nome
 - Via
 - Cap
 - Num Civico
-- Citt‡
+- Citt√†
 - Cantone
 - Num Sale
 
-ï TELEFONO
+‚Ä¢ TELEFONO
 - Numero [PK]
 - CodCinema [FK]
 
-ï SALA
+‚Ä¢ SALA
 - ID [PK]
 - Superficie
 - Capienza
 - CodCinema [FK]
 
-ï POSTO
+‚Ä¢ POSTO
 - ID [PK]
 - NumFila
 - NumColonna
 - CodSala [FK]
 - Occupato
 
-ï PALINSESTO
+‚Ä¢ PALINSESTO
 - ID [PK]
 - Data
 - Ora
@@ -36,12 +36,12 @@
 - CodSala [FK]
 - CodFilm [FK]
 
-ï PROGRAMMAZIONI
+‚Ä¢ PROGRAMMAZIONI
 - CodPalinsesto [PK] [FK]
 - CodFilm [PK] [FK]
 - Tipo
 
-ï FILM IN PROGRAMMAZIONE
+‚Ä¢ FILM IN PROGRAMMAZIONE
 - ID [PK]
 - Titolo
 - Recensione
@@ -52,24 +52,24 @@
 - Data Uscita
 - Distributore
 
-ï ARTISTA
+‚Ä¢ ARTISTA
 - Nome [PK]
 - Cognome [PK]
-- Et‡
+- Et√†
 - Attore
 - Regista
 
-ï CASTING
+‚Ä¢ CASTING
 - CodFilm [PK] [FK]
 - NomeArtista [PK] [FK]
 - CognomeArtista [PK] [FK]
 - Ruolo
 
-ï LOCAZIONI
+‚Ä¢ LOCAZIONI
 - CodSala [PK]
 - CodPalinsesto [PK]
 
-ï PRENOTAZIONI
+‚Ä¢ PRENOTAZIONI
 - ID [PK]
 - Prezzo
 - 3D
@@ -77,13 +77,13 @@
 - DataPrenotazione
 - CodUtente [FK]
 
-ï POSTO SCELTO
+‚Ä¢ POSTO SCELTO
 - ID [PK]
 - NumFila
 - Numcolonna
 - CodSala [FK]
 
-ï UTENTE
+‚Ä¢ UTENTE
 - ID [PK]
 - Username
 - Password
