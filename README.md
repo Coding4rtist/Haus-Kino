@@ -12,6 +12,8 @@
 - [ ] SQL - Utenti e Ruoli
 - [ ] SQL - Altro
 - [ ] SQL - Tabelle
+- [x] INTERFACCIA - Nome
+- [x] INTERFACCIA - Logo
 - [x] INTERFACCIA - Design
 - [ ] INTERFACCIA - Collegamento al DB
 
