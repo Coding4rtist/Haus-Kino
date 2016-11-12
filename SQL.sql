@@ -81,9 +81,9 @@ STORAGE (INITIAL 10k)
 
 CREATE TABLE FILM_IN_PROGRAMMAZIONE (
   id         CHAR(9)    NOT NULL,
-  titolo     VARCHAR2(30) NOT NULL,
+  titolo     VARCHAR2(40) NOT NULL,
   recensione CLOB,
-  genere     VARCHAR2(20) NOT NULL,
+  genere     VARCHAR2(30) NOT NULL,
   anno       NUMBER(4)    NOT NULL,
   paese      VARCHAR2(20) NOT NULL,
   durata     NUMBER(3)    NOT NULL,
