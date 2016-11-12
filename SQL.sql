@@ -241,3 +241,14 @@ ON DELETE SET NULL;
 --Sequenze
 CREATE SEQUENCE utenti_auto_incr START WITH 1
 INCREMENT BY 1;
+
+CREATE SEQUENCE posti_auto_incr START WITH 1
+INCREMENT BY 1;
+
+--Trigger
+CREATE OR REPLACE TRIGGER utenti_trigger
+BEFORE INSERT ON utente
+FOR EACH ROW
+BEGIN
+:new.id := utenti_auto_incr.nextval;
+END;
