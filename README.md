@@ -12,3 +12,12 @@
 - [ ] SQL - Tabelle
 - [x] INTERFACCIA - Design
 - [ ] INTERFACCIA - Collegamento al DB
+
+
+## Errori
+- Username check length troppo lungo (min=8)
+- Aggiungere check spazi in username, password ed email
+- posto_scelto tabella giusta?
+- in Cinema manca Città
+- NCiv in Cinema troppo piccolo (2->3)
+
