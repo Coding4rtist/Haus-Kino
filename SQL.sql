@@ -14,13 +14,14 @@ CREATE TABLE CINEMA (
    nome      VARCHAR2(20) NOT NULL,
    via       VARCHAR2(30) NOT NULL,
    cap       NUMBER(6)    NOT NULL,
-   n_civico  NUMBER(2)    NOT NULL,
+   n_civico  NUMBER(3)    NOT NULL,
    cantone   VARCHAR2(30) NOT NULL,
    n_sale    NUMBER(2)    NOT NULL,
+   citta     VARCHAR(30)   NOT NULL,
    CONSTRAINT PK_CINEMA
    PRIMARY KEY (id)
 )
-STORAGE (INITIAL 5000K)
+STORAGE (INITIAL 6250K)
 
 CREATE TABLE TELEFONO (
    numero       NUMBER(11) NOT NULL,
@@ -156,7 +157,7 @@ STORAGE (INITIAL 10K)
 CREATE TABLE UTENTE (
  id         NUMBER(4)     NOT NULL,
  username   VARCHAR2(20)  NOT NULL UNIQUE,
- CHECK      (LENGTH(username)>7),
+ CHECK      (LENGTH(username)>4),
  password   VARCHAR2(20)  NOT NULL,
 CHECK       (LENGTH(password)>7),
  email      VARCHAR2(20)  NOT NULL,
