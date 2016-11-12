@@ -1,5 +1,7 @@
 # Haus-Kino
 
+<img src="Untitled-1.png" width="300">
+
 ## Progresso
 - [x] MODELLO ER
 - [ ] SEMPLIFICAZIONE MODELLO ER
