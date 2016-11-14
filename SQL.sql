@@ -38,7 +38,7 @@ CREATE TABLE SALA (
   CHECK       (capienza<400),
   codCinema   NUMBER(2) NOT NULL,
   CONSTRAINT PK_SALA
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,codCinema)
 )
 STORAGE (INITIAL 10K)
 
