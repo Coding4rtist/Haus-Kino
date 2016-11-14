@@ -8,6 +8,25 @@ CREATE USER cinemadba DEFAULT TABLESPACE ts_cinema IDENTIFIED BY 12345;
 GRANT DBA, UNLIMITED TABLESPACE TO cinemadba;
 
 ***** _CINEMADBA_ *****
+-- Utenti
+CREATE USER webapp DEFAULT TABLESPACE ts_cinema IDENTIFIED BY 12345;
+GRANT CONNECT TO webapp;
+GRANT SELECT ON cinemadba.FILM_IN_PROGRAMMAZIONE TO webapp;
+GRANT SELECT ON cinemadba.ARTISTA TO webapp;
+GRANT SELECT ON cinemadba.CINEMA TO webapp;
+GRANT SELECT ON cinemadba.PALINSESTO TO webapp;
+GRANT SELECT ON cinemadba.ARTISTA TO webapp;
+GRANT SELECT ON cinemadba.POSTO TO webapp;
+GRANT SELECT ON cinemadba.POSTO_SCELTO TO webapp;
+GRANT SELECT ON cinemadba.SALA TO webapp;
+GRANT SELECT ON cinemadba.TELEFONO TO webapp;
+GRANT SELECT ON cinemadba.UTENTI TO webapp;
+
+GRANT INSERT  ON cinemadba.UTENTI TO webapp;
+GRANT INSERT  ON cinemadba.POSTO_SCELTO TO webapp;
+GRANT INSERT  ON cinemadba.PRENOTAZIONI TO webapp;
+
+
 -- Tables
 CREATE TABLE CINEMA (
    id        NUMBER(2)    NOT NULL,
@@ -253,3 +272,12 @@ FOR EACH ROW
 BEGIN
 :new.id := utenti_auto_incr.nextval;
 END;
+
+--Query
+INSERT INTO cinemadba.PRENOTAZIONI (PREZZO, TIPO, PAGATO, DATA, CODUSER, CODPALINSESTO) VALUES ( '...','...','...','...','...','...');
+
+SELECT * FROM cinemadba.PRENOTAZIONI
+WHERE coduser= '...';
+
+SELECT * FROM cinemadba.PALINSESTO;
+
