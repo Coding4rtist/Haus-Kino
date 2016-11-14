@@ -163,11 +163,7 @@ STORAGE (INITIAL 20K)
 
 CREATE TABLE POSTO_SCELTO (
   id        NUMBER(3)  NOT NULL,
-  n_fila    CHAR(1)    NOT NULL,
-  n_col     NUMBER(2)  NOT NULL,
   codSala   CHAR(1)    NOT NULL,
-  CONSTRAINT UN_f_c
-  UNIQUE    (n_fila,n_col),
   CONSTRAINT PK_PS
   PRIMARY KEY (id)
 )
@@ -274,10 +270,51 @@ BEGIN
 END;
 
 --Query
+/* Inserimento di un nuova prenotazione da parte di un utente */
 INSERT INTO cinemadba.PRENOTAZIONI (PREZZO, TIPO, PAGATO, DATA, CODUSER, CODPALINSESTO) VALUES ( '...','...','...','...','...','...');
 
-SELECT * FROM cinemadba.PRENOTAZIONI
-WHERE coduser= '...';
+/* trova dati della prenotazione e titolo del film prenotato effettuata dall'utente(nome) */
+SELECT Fip.titolo, Pren.prezzo, Pren.tipo, Pren.pagato, Pren.data
+FROM ((cinemadba.PRENOTAZIONI Pren JOIN cinemadba.UTENTE Ute ON Pren.CODUSER = Ute.ID) JOIN 
+cinemadba.PALINSESTO Pal ON Pal.id = Pren.codpalinsesto) JOIN cinemadba.FILM_IN_PROGRAMMAZIONE Fip ON
+Fip.id = Pal.CODFILM
+WHERE Ute.Username = 'Sadra'
+ORDER BY Pren.data;
 
-SELECT * FROM cinemadba.PALINSESTO;
+/*selezione data, sala, cinema, e titolo di un film che verrà proiettato*/
+SELECT Pal.data_e_ora,Pal.codsala as Sala,Cin.nome as Cinema,Fip.titolo as TitoloFilm
+FROM (cinemadba.Palinsesto Pal JOIN cinemadba.Cinema Cin ON Pal.codcinema = Cin.id) JOIN
+cinemadba.FILM_IN_PROGRAMMAZIONE Fip ON Pal.codfilm = Fip.id;
+
+/*quante prenotazioni sono state effettuate per un determinato film*/
+SELECT COUNT(Pren.id) AS Prenotazioni
+FROM (cinemadba.PRENOTAZIONI Pren JOIN cinemadba.PALINSESTO Pal ON Pren.codpalinsesto = Pal.id) JOIN
+cinemadba.FILM_IN_PROGRAMMAZIONE Fip ON Pal.CODFILM = Fip.id
+WHERE Fip.titolo='...';
+
+/*incassi per un determinato film*/
+SELECT SUM(Pren.prezzo) AS Incassi
+FROM(cinemadba.PRENOTAZIONI Pren JOIN cinemadba.PALINSESTO Pal ON Pren.codpalinsesto = Pal.id) JOIN
+cinemadba.FILM_IN_PROGRAMMAZIONE Fip ON Pal.CODFILM = Fip.id
+WHERE Fip.titolo='....';
+
+
+/*Cinema a zurigo*/
+SELECT Cin.Nome, Cin.Citta
+FROM cinemadba.Cinema Cin
+WHERE Cin.Cantone='Zurigo';
+
+
+/*Seleziona tutti gli utenti che non hanno prenotato alcun film*/
+SELECT Ute.Nome, Ute.Cognome
+FROM cinemadba.UTENTE Ute
+WHERE Ute.id NOT IN(
+   SELECT Pren.CODUSER
+   FROM cinemadba.PRENOTAZIONI Pren
+   )
+ORDER BY Ute.Cognome;
+
+
+
+
 
