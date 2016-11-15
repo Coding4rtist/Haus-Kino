@@ -20,9 +20,9 @@ GRANT SELECT ON cinemadba.POSTO TO webapp;
 GRANT SELECT ON cinemadba.POSTO_SCELTO TO webapp;
 GRANT SELECT ON cinemadba.SALA TO webapp;
 GRANT SELECT ON cinemadba.TELEFONO TO webapp;
-GRANT SELECT ON cinemadba.UTENTI TO webapp;
+GRANT SELECT ON cinemadba.UTENTE TO webapp;
 
-GRANT INSERT  ON cinemadba.UTENTI TO webapp;
+GRANT INSERT  ON cinemadba.UTENTE TO webapp;
 GRANT INSERT  ON cinemadba.POSTO_SCELTO TO webapp;
 GRANT INSERT  ON cinemadba.PRENOTAZIONI TO webapp;
 
@@ -146,7 +146,7 @@ CREATE TABLE FILM_IN_PROGRAMMAZIONE (
   paese      VARCHAR2(20) NOT NULL,
   durata     NUMBER(3)    NOT NULL,
   d_uscita   DATE,
-  distrib    VARCHAR(20)  NOT NULL,
+  distrib    VARCHAR(30)  NOT NULL,
   CONSTRAINT PK_FIP
   PRIMARY KEY(id)
 )
