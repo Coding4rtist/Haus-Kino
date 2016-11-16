@@ -371,5 +371,14 @@ WHERE data_e_ora > '16-nov-2016' AND data_e_ora < '17-nov-2016'
 GROUP BY codfilm
 
 /* ??? */
+SELECT Cin.nome, Cin.cantone
+FROM cinemadba.PALINSESTO Pal JOIN cinemadba.CINEMA Cin
+ON Cin.id = Pal.CODCINEMA
+WHERE Pal.codfilm = 'tt2277860'
+ORDER BY Cin.nome
 
+SELECT data_e_ora
+FROM cinemadba.PALINSESTO
+WHERE codfilm = 'tt2277860'
+ORDER BY data_e_ora
 
