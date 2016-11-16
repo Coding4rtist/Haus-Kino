@@ -362,8 +362,12 @@ ORDER BY Ute.Cognome;
 SELECT Pal.id,Pal.data_e_ora,Pal.codsala as Sala,  Cin.nome as Cinema,  FIP.titolo, PROG.tipo
 FROM ((PALINSESTO Pal JOIN  CINEMA Cin ON Pal.codcinema=Cin.id) JOIN
 FILM_IN_PROGRAMMAZIONE FIP ON Pal.codfilm=FIP.id) JOIN
-PROGRAMMAZIONI PROG ON FIP.id=PROG.codfilm
+PROGRAMMAZIONI PROG ON Pal.id=PROG.codpalinsesto
 ORDER BY PAL.id
 
+/* ??? */
+SELECT codfilm FROM cinemadba.PALINSESTO
+WHERE data_e_ora > '16-nov-2016' AND data_e_ora < '17-nov-2016'
+GROUP BY codfilm
 
 
