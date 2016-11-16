@@ -21,4 +21,5 @@
 ## Errori
 - Aggiungere check spazi in username, password ed email
 - posto_scelto tabella giusta?
-
+- UNIQUE in PALINSESTO (codcinema,codsala,data_e_ora)
+- Ora palinsesto ad orari fissati?
