@@ -370,4 +370,6 @@ SELECT codfilm FROM cinemadba.PALINSESTO
 WHERE data_e_ora > '16-nov-2016' AND data_e_ora < '17-nov-2016'
 GROUP BY codfilm
 
+/* ??? */
+
 
