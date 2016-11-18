@@ -911,4 +911,4 @@
 9.036713,45.821140,0
 9.011446,45.816170,0
 </coordinates> </LinearRing> </outerBoundaryIs>  </Polygon>
-</MultiGeometry> <Style> <PolyStyle>  <color>#acdcdcd32</color> <outline>0</outline> </PolyStyle> </Style> </Placemark> </Document> </kml>
+</MultiGeometry> <Style> <PolyStyle>  <color>#acdcdcd40</color> <outline>0</outline> </PolyStyle> </Style> </Placemark> </Document> </kml>
