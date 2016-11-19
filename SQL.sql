@@ -74,7 +74,8 @@ CREATE TABLE CINEMA (
    n_civico  NUMBER(3)    NOT NULL,
    cantone   VARCHAR2(30) NOT NULL,
    n_sale    NUMBER(2)    NOT NULL,
-   citta     VARCHAR(30)   NOT NULL,
+   citta     VARCHAR2(30)   NOT NULL,
+   coords    VARCHAR2(20)
    CONSTRAINT PK_CINEMA
    PRIMARY KEY (id)
 )
@@ -101,14 +102,15 @@ CREATE TABLE SALA (
 STORAGE (INITIAL 10K)
 
 CREATE TABLE POSTO (
-  id           NUMBER(3)   NOT NULL,
+  id           NUMBER(9)   NOT NULL,
   n_fila       CHAR(1)     NOT NULL,
   n_col        NUMBER(2)   NOT NULL,
   free         NUMBER(1)  NOT NULL,
   CHECK        (free=1 OR free=0),
   codSala      CHAR(1)     NOT NULL,
+  codCinema    NUMBER(2)     NOT NULL,
   CONSTRAINT UN_fi_col_sala
-  UNIQUE (n_fila,n_col,codSala),
+  UNIQUE (n_fila,n_col,codSala,codCinema),
   CONSTRAINT PK_POSTO
   PRIMARY KEY (id)
 )
@@ -146,7 +148,7 @@ CREATE TABLE FILM_IN_PROGRAMMAZIONE (
   paese      VARCHAR2(20) NOT NULL,
   durata     NUMBER(3)    NOT NULL,
   d_uscita   DATE,
-  distrib    VARCHAR(30)  NOT NULL,
+  distrib    VARCHAR2(30)  NOT NULL,
   CONSTRAINT PK_FIP
   PRIMARY KEY(id)
 )
@@ -157,8 +159,10 @@ CREATE TABLE ARTISTA (
   nome     VARCHAR2(20) NOT NULL,
   cognome  VARCHAR2(20) NOT NULL,
   eta      NUMBER(2)    NOT NULL,
-  attore   VARCHAR(20)  NOT NULL,
-  regista  VARCHAR(20)  NOT NULL,
+  attore   NUMBER(1)  NOT NULL,
+  CHECK    (attore=0 OR attore=1),
+  regista  NUMBER(1)  NOT NULL,
+  CHECK    (regista=0 OR regista=1),
   CONSTRAINT PK_ARTISTA
   PRIMARY KEY(nome,cognome)
 )
@@ -201,7 +205,7 @@ CREATE TABLE PRENOTAZIONI (
 STORAGE (INITIAL 20K)
 
 CREATE TABLE POSTO_SCELTO (
-  id        NUMBER(3)  NOT NULL,
+  id        NUMBER(9)  NOT NULL,
   CONSTRAINT PK_PS
   PRIMARY KEY (id)
 )
