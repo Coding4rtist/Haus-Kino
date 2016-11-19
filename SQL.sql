@@ -66,6 +66,15 @@ GRANT SELECT, INSERT, UPDATE ON cinemadba.POSTO_SCELTO           TO admin;
 
 
 -- Tables
+CREATE TABLE STATO_POSTO(
+codPalinsesto NUMBER(9) NOT NULL,
+codPosto      NUMBER(9) NOT NULL,
+free          NUMBER(1) NOT NULL,
+CHECK         (free=0 OR free=1),
+CONSTRAINT PK_STATO_POSTO 
+PRIMARY KEY(codPalinsesto,codPosto)
+)
+
 CREATE TABLE CINEMA (
    id        NUMBER(2)    NOT NULL,
    nome      VARCHAR2(20) NOT NULL,
@@ -105,8 +114,6 @@ CREATE TABLE POSTO (
   id           NUMBER(9)   NOT NULL,
   n_fila       CHAR(1)     NOT NULL,
   n_col        NUMBER(2)   NOT NULL,
-  free         NUMBER(1)  NOT NULL,
-  CHECK        (free=1 OR free=0),
   codSala      CHAR(1)     NOT NULL,
   codCinema    NUMBER(2)     NOT NULL,
   CONSTRAINT UN_fi_col_sala
@@ -295,6 +302,14 @@ ALTER TABLE POSTO_SCELTO
 ADD CONSTRAINT FK_PS FOREIGN KEY(id)
 REFERENCES POSTO(id)
 
+ALTER TABLE STATO_POSTO
+ADD CONSTRAINT FK_SP FOREIGN KEY (codPalinsesto)
+REFERENCES PALINSESTO(id)
+
+ALTER TABLE STATO_POSTO
+ADD CONSTRAINT FK_SP1 FOREIGN KEY (codPosto)
+REFERENCES POSTO(id)
+
 --Sequenze
 CREATE SEQUENCE utenti_auto_incr START WITH 1
 INCREMENT BY 1;
@@ -361,6 +376,12 @@ WHERE Ute.id NOT IN(
    FROM cinemadba.PRENOTAZIONI Pren
    )
 ORDER BY Ute.Cognome;
+
+/* Seleziona tutti i posti di un determinato palinsesto */
+SELECT Po.id, Po.n_fila, Po.n_col, SP.free
+FROM POSTO Po JOIN STATO_POSTO SP ON Po.id=SP.codPosto
+WHERE SP.codPalinsesto = '1';
+
 
 /* ??? */
 SELECT Pal.id,Pal.data_e_ora,Pal.codsala as Sala,  Cin.nome as Cinema,  FIP.titolo, PROG.tipo
