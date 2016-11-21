@@ -97,7 +97,9 @@ CREATE TABLE SALA (
    n_file      NUMBER(2) NOT NULL,
    n_colonne   NUMBER(2) NOT NULL,
   CONSTRAINT PK_SALA
-  PRIMARY KEY (id,codCinema)
+  PRIMARY KEY (id),
+  CONSTRAINT UN_SALA
+  UNIQUE(id,codCinema)
 )
 STORAGE (INITIAL 69750K)
 
@@ -293,43 +295,57 @@ ADD CONSTRAINT FK_PREN FOREIGN KEY (codUser)
 REFERENCES UTENTE(id)
 ON DELETE SET NULL;
 
+
 ALTER TABLE PRENOTAZIONI
-ADD CONSTRAINT FK_PREN FOREIGN KEY (codUser)
-REFERENCES UTENTE(id)
+ADD CONSTRAINT FK_PREN2 FOREIGN KEY (codPalinsesto)
+REFERENCES PALINSESTO(id)
 ON DELETE SET NULL;
 
 ALTER TABLE POSTI_PRENOTATI
 ADD CONSTRAINT FK_PP FOREIGN KEY (codPalinsesto)
 REFERENCES PALINSESTO(id)
+ON DELETE SET NULL;
 
-ALTER TABLE POSTI PRENOTATI
-ADD CONSTRAINT FK_PP1 FOREIGN KEY (codPosto)
-REFERENCES POSTO(id)
+ALTER TABLE POSTI_PRENOTATI
+ADD CONSTRAINT FK_PP1 FOREIGN KEY (codSala)
+REFERENCES SALA(id)
+ON DELETE SET NULL;
 
-ALTER TABLE POSTI PRENOTATI
+ALTER TABLE POSTI_PRENOTATI
 ADD CONSTRAINT FK_PP2 FOREIGN KEY (codPren)
 REFERENCES PRENOTAZIONI(id)
+ON DELETE SET NULL;
+
+ALTER TABLE RECENSIONE
+ADD CONSTRAINT FK_REC1 FOREIGN KEY (codUser)
+REFERENCES UTENTE(id)
+ON DELETE SET NULL;
+
+ALTER TABLE RECENSIONE
+ADD CONSTRAINT FK_REC2 FOREIGN KEY (codFilm)
+REFERENCES FILM_IN_PROGRAMMAZIONE(id)
+ON DELETE SET NULL;
 
 --Sequenze
 CREATE SEQUENCE utenti_auto_incr START WITH 1
 INCREMENT BY 1;
 
-CREATE SEQUENCE posti_auto_incr START WITH 1
+CREATE SEQUENCE review_auto_incr START WITH 1
 INCREMENT BY 1;
 
 --Trigger
 CREATE OR REPLACE TRIGGER utenti_trigger
-BEFORE INSERT ON utente
+BEFORE INSERT ON UTENTE
 FOR EACH ROW
 BEGIN
 :new.id := utenti_auto_incr.nextval;
 END;
 
-CREATE OR REPLACE TRIGGER posti_trigger
-BEFORE INSERT ON posto
+CREATE OR REPLACE TRIGGER review_trigger
+BEFORE INSERT ON RECENSIONE
 FOR EACH ROW
 BEGIN
-:new.id := posti_auto_incr.nextval;
+:new.id := review_auto_incr.nextval;
 END;
 
 --Query
@@ -383,27 +399,33 @@ FROM POSTO Po JOIN STATO_POSTO SP ON Po.id=SP.codPosto
 WHERE SP.codPalinsesto = '1';
 
 
-/* ??? */
+/* seleziona il palinsesto la data la sala il nome del cinema il titolo di un film e se è 3d o no  */
 SELECT Pal.id,Pal.data_e_ora,Pal.codsala as Sala,  Cin.nome as Cinema,  FIP.titolo, PROG.tipo
 FROM ((PALINSESTO Pal JOIN  CINEMA Cin ON Pal.codcinema=Cin.id) JOIN
 FILM_IN_PROGRAMMAZIONE FIP ON Pal.codfilm=FIP.id) JOIN
 PROGRAMMAZIONI PROG ON Pal.id=PROG.codpalinsesto
 ORDER BY PAL.id
 
-/* ??? */
+/* seleziona il codice di un film in base alla data */
 SELECT codfilm FROM cinemadba.PALINSESTO
 WHERE data_e_ora > '16-nov-2016' AND data_e_ora < '17-nov-2016'
 GROUP BY codfilm
 
-/* ??? */
+/* seleziona nome e cantone di un cinema in base al film considerato */
 SELECT Cin.nome, Cin.cantone
 FROM cinemadba.PALINSESTO Pal JOIN cinemadba.CINEMA Cin
 ON Cin.id = Pal.CODCINEMA
 WHERE Pal.codfilm = 'tt2277860'
 ORDER BY Cin.nome
 
+/*seleziona la data e l'ora di un palinsesto in base al film programmato*/
 SELECT data_e_ora
 FROM cinemadba.PALINSESTO
 WHERE codfilm = 'tt2277860'
 ORDER BY data_e_ora
+
+/*Seleziona l'id di un palinsesto in base all'id di un film e alla data*/
+SELECT Pal.id
+FROM cinemadba.PALINSESTO Pal
+WHERE Pal.codfilm='tt2277860' AND Pal.data_e_ora='zzzzz'
 
