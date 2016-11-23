@@ -5,3 +5,6 @@
 - 415 : 
 - 416 : 
 - 417 : Dati login errati
+- 418 : 
+- 419 : 
+- 420 : Loggarsi per scrivere review
