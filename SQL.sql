@@ -73,8 +73,8 @@ CREATE TABLE CINEMA (
    n_civico  NUMBER(3)    NOT NULL,
    cantone   VARCHAR2(30) NOT NULL,
    n_sale    NUMBER(2)    NOT NULL,
-   citta     VARCHAR2(30)   NOT NULL,
-   coords    VARCHAR2(20)
+   citta     VARCHAR2(30) NOT NULL,
+   coords    VARCHAR2(20) NOT NULL,
    CONSTRAINT PK_CINEMA
    PRIMARY KEY (id)
 )
@@ -106,7 +106,8 @@ STORAGE (INITIAL 69750K)
 CREATE TABLE POSTI_PRENOTATI(
    id            NUMBER(9) NOT NULL,
    codPalinsesto NUMBER(9) NOT NULL,
-   codSala       CHAR(1) NOT NULL,
+   codSala       CHAR(1)   NOT NULL,
+   codCinema       CHAR(1) NOT NULL,
    codPren       NUMBER(6) NOT NULL,
    CONSTRAINT PK_STATO_POSTO 
    PRIMARY KEY(id),
@@ -116,86 +117,86 @@ CREATE TABLE POSTI_PRENOTATI(
 STORAGE (INITIAL 4275000000K)
 
 CREATE TABLE PALINSESTO (
-  id            NUMBER(9) NOT NULL,
-  data_e_ora    DATE      NOT NULL,
-  codCinema     NUMBER(2) NOT NULL,
-  codSala       CHAR(1)   NOT NULL,
-  codFilm       CHAR(9)   NOT NULL,
-  CONSTRAINT UN_pal
-  UNIQUE (data_e_ora,codCinema,codSala,codFilm),
-  CONSTRAINT PK_PALINSESTO
-  PRIMARY KEY (id)
+   id            NUMBER(9) NOT NULL,
+   data_e_ora    DATE      NOT NULL,
+   codCinema     NUMBER(2) NOT NULL,
+   codSala       CHAR(1)   NOT NULL,
+   codFilm       CHAR(9)   NOT NULL,
+   CONSTRAINT UN_pal
+   UNIQUE (data_e_ora,codCinema,codSala,codFilm),
+   CONSTRAINT PK_PALINSESTO
+   PRIMARY KEY (id)
 )
 STORAGE (INITIAL 79500K)
 
 CREATE TABLE PROGRAMMAZIONI (
-  codPalinsesto NUMBER(9) NOT NULL,
-  codFilm       CHAR(9) NOT NULL,
-  tipo          NUMBER(1) NOT NULL,
-  CHECK         (tipo=1 OR tipo=0),
-  CONSTRAINT PK_PROGRAMMAZIONI
-  PRIMARY KEY(codPalinsesto,codFilm)
+   codPalinsesto NUMBER(9)   NOT NULL,
+   codFilm       CHAR(9)     NOT NULL,
+   tipo          NUMBER(1)   NOT NULL,
+   CHECK         (tipo=1 OR tipo=0),
+   CONSTRAINT PK_PROGRAMMAZIONI
+   PRIMARY KEY(codPalinsesto,codFilm)
 )
 STORAGE (INITIAL 49500k)
 
 CREATE TABLE FILM_IN_PROGRAMMAZIONE (
-  id         CHAR(9)    NOT NULL,
-  titolo     VARCHAR2(40) NOT NULL,
-  genere     VARCHAR2(30) NOT NULL,
-  anno       NUMBER(4)    NOT NULL,
-  paese      VARCHAR2(20) NOT NULL,
-  durata     NUMBER(3)    NOT NULL,
-  d_uscita   DATE,
-  distrib    VARCHAR2(30)  NOT NULL,
-  CONSTRAINT PK_FIP
-  PRIMARY KEY(id)
+   id         CHAR(9)       NOT NULL,
+   titolo     VARCHAR2(40)  NOT NULL,
+   genere     VARCHAR2(30)  NOT NULL,
+   anno       NUMBER(4)     NOT NULL,
+   paese      VARCHAR2(20)  NOT NULL,
+   durata     NUMBER(3)     NOT NULL,
+   d_uscita   DATE,
+   distrib    VARCHAR2(30)  NOT NULL,
+   CONSTRAINT PK_FIP
+   PRIMARY KEY(id)
 )
 STORAGE (INITIAL 143500K);
 
 CREATE TABLE ARTISTA (
-  nome     VARCHAR2(20) NOT NULL,
-  cognome  VARCHAR2(20) NOT NULL,
-  eta      NUMBER(2)    NOT NULL,
-  attore   NUMBER(1)  NOT NULL,
-  CHECK    (attore=0 OR attore=1),
-  regista  NUMBER(1)  NOT NULL,
-  CHECK    (regista=0 OR regista=1),
-  CONSTRAINT PK_ARTISTA
-  PRIMARY KEY(nome,cognome)
+   nome     VARCHAR2(20) NOT NULL,
+   cognome  VARCHAR2(20) NOT NULL,
+   eta      NUMBER(2)    NOT NULL,
+   attore   NUMBER(1)    NOT NULL,
+   CHECK    (attore=0 OR attore=1),
+   regista  NUMBER(1)    NOT NULL,
+   CHECK    (regista=0 OR regista=1),
+   CONSTRAINT PK_ARTISTA
+   PRIMARY KEY(nome,cognome)
 )
 STORAGE (INITIAL 480000K)
 
 CREATE TABLE CASTING (
-  codFilm   CHAR(9)  NOT NULL,
-  n_Artista VARCHAR2(20) NOT NULL,
-  c_Artista VARCHAR2(20) NOT NULL,
-  CONSTRAINT PK_CASTING
-  PRIMARY KEY (codFilm,n_Artista,c_Artista)
+   codFilm   CHAR(9)      NOT NULL,
+   n_Artista VARCHAR2(20) NOT NULL,
+   c_Artista VARCHAR2(20) NOT NULL,
+   CONSTRAINT PK_CASTING
+   PRIMARY KEY (codFilm,n_Artista,c_Artista)
 )
 STORAGE (INITIAL 490000K)
 
 CREATE TABLE LOCAZIONI (
-  codSala       CHAR(1)   NOT NULL,
-  codPalinsesto NUMBER(9) NOT NULL,
-  CONSTRAINT PK_LOCAZIONI
-  PRIMARY KEY (codSala,codPalinsesto)
+   codSala       CHAR(1)   NOT NULL,
+   codPalinsesto NUMBER(9) NOT NULL,
+   CONSTRAINT PK_LOCAZIONI
+   PRIMARY KEY (codSala,codPalinsesto)
 )
 STORAGE (INITIAL 22500K)
 
 CREATE TABLE PRENOTAZIONI (
-  id            NUMBER(6)    NOT NULL,
-  prezzo        NUMBER(3)    NOT NULL,
-  tipo          NUMBER(1)    NOT NULL,
-  CHECK         (tipo=1 OR tipo=0),
-  pagato        NUMBER(1)  NOT NULL,
-  CHECK         (pagato=1 OR pagato=0),
-  data          DATE         NOT NULL,
-  codUser       NUMBER (4)   NOT NULL,
-  codPalinsesto NUMBER(9)    NOT NULL,
-  CONSTRAINT UN_pren
-  UNIQUE     (codUser,codPalinsesto,data),
-  CONSTRAINT PK_PREN
-  PRIMARY KEY (id)
+   id            NUMBER(6)    NOT NULL,
+   prezzo        NUMBER(3)    NOT NULL,
+   tipo          NUMBER(1)    NOT NULL,
+   CHECK         (tipo=1 OR tipo=0),
+   pagato        NUMBER(1)    NOT NULL,
+   CHECK         (pagato=1 OR pagato=0),
+   data          DATE         NOT NULL,
+   codUser       NUMBER (4)   NOT NULL,
+   codPalinsesto NUMBER(9)    NOT NULL,
+   CONSTRAINT UN_pren
+   UNIQUE     (codUser,codPalinsesto,data),
+   CONSTRAINT PK_PREN
+   PRIMARY KEY (id)
 )
 STORAGE (INITIAL 930000K)
 
@@ -316,6 +317,11 @@ ADD CONSTRAINT FK_PP2 FOREIGN KEY (codPren)
 REFERENCES PRENOTAZIONI(id)
 ON DELETE SET NULL;
 
+ALTER TABLE POSTI_PRENOTATI
+ADD CONSTRAINT FK_PP3
+FOREIGN KEY(codsala,codcinema)
+REFERENCES SALA(id,codcinema)
+
 ALTER TABLE RECENSIONE
 ADD CONSTRAINT FK_REC1 FOREIGN KEY (codUser)
 REFERENCES UTENTE(id)
@@ -418,13 +424,13 @@ ON Cin.id = Pal.CODCINEMA
 WHERE Pal.codfilm = 'tt2277860'
 ORDER BY Cin.nome
 
-/*seleziona la data e l'ora di un palinsesto in base al film programmato*/
+/* seleziona la data e l'ora di un palinsesto in base al film programmato */
 SELECT data_e_ora
 FROM cinemadba.PALINSESTO
 WHERE codfilm = 'tt2277860'
 ORDER BY data_e_ora
 
-/*Seleziona l'id di un palinsesto in base all'id di un film e alla data*/
+/* Seleziona l'id di un palinsesto in base all'id di un film e alla data */
 SELECT Pal.id
 FROM cinemadba.PALINSESTO Pal
 WHERE Pal.codfilm='tt2277860' AND Pal.data_e_ora='zzzzz'
