@@ -10,25 +10,25 @@ GRANT DBA, UNLIMITED TABLESPACE TO cinemadba;
 ***** _CINEMADBA_ *****
 -- USER webapp
 CREATE USER webapp DEFAULT TABLESPACE ts_cinema IDENTIFIED BY 12345;
-GRANT CONNECT TO webapp;
-GRANT SELECT ON cinemadba.FILM_IN_PROGRAMMAZIONE TO webapp;
-GRANT SELECT ON cinemadba.ARTISTA TO webapp;
-GRANT SELECT ON cinemadba.CINEMA TO webapp;
-GRANT SELECT ON cinemadba.PALINSESTO TO webapp;
-GRANT SELECT ON cinemadba.ARTISTA TO webapp;
-GRANT SELECT ON cinemadba.POSTO TO webapp;
-GRANT SELECT ON cinemadba.POSTO_SCELTO TO webapp;
-GRANT SELECT ON cinemadba.SALA TO webapp;
-GRANT SELECT ON cinemadba.TELEFONO TO webapp;
-GRANT SELECT ON cinemadba.UTENTE TO webapp;
-GRANT SELECT ON cinemadba.POSTI_PRENOTATI TO webapp;
-GRANT SELECT ON cinemadba.RECENSIONE TO webapp;
-
-GRANT INSERT  ON cinemadba.UTENTE TO webapp;
-GRANT INSERT  ON cinemadba.POSTO_SCELTO TO webapp;
-GRANT INSERT  ON cinemadba.PRENOTAZIONI TO webapp;
-GRANT INSERT  ON cinemadba.POSTI_PRENOTATI TO webapp;
-GRANT INSERT  ON cinemadba.RECENSIONE TO webapp;
+GRANT CONNECT                                       TO webapp;
+GRANT SELECT  ON cinemadba.FILM_IN_PROGRAMMAZIONE   TO webapp;
+GRANT SELECT  ON cinemadba.ARTISTA                  TO webapp;
+GRANT SELECT  ON cinemadba.CINEMA                   TO webapp;
+GRANT SELECT  ON cinemadba.PALINSESTO               TO webapp;
+GRANT SELECT  ON cinemadba.ARTISTA                  TO webapp;
+GRANT SELECT  ON cinemadba.POSTO                    TO webapp;
+GRANT SELECT  ON cinemadba.POSTO_SCELTO             TO webapp;
+GRANT SELECT  ON cinemadba.SALA                     TO webapp;
+GRANT SELECT  ON cinemadba.TELEFONO                 TO webapp;
+GRANT SELECT  ON cinemadba.UTENTE                   TO webapp;
+GRANT SELECT  ON cinemadba.POSTI_PRENOTATI          TO webapp;
+GRANT SELECT  ON cinemadba.RECENSIONE               TO webapp;
+GRANT SELECT  ON cinemadba.pren_auto_incr           TO webapp;
+GRANT INSERT  ON cinemadba.UTENTE                   TO webapp;
+GRANT INSERT  ON cinemadba.POSTO_SCELTO             TO webapp;
+GRANT INSERT  ON cinemadba.PRENOTAZIONI             TO webapp;
+GRANT INSERT  ON cinemadba.POSTI_PRENOTATI          TO webapp;
+GRANT INSERT  ON cinemadba.RECENSIONE               TO webapp;
 
 -- USER admin
 CREATE USER admin DEFAULT TABLESPACE ts_cinema IDENTIFIED BY 12345;
@@ -90,7 +90,7 @@ STORAGE (INITIAL 525K)
 
 CREATE TABLE SALA (
    id          CHAR(1)   NOT NULL,
-   superficie  NUMBER(3) NOT NULL,
+   superficie  FLOAT NOT NULL,
    capienza    NUMBER(3) NOT NULL,
    CHECK       (capienza<400),
    codCinema   NUMBER(2) NOT NULL,
@@ -106,8 +106,6 @@ STORAGE (INITIAL 69750K)
 CREATE TABLE POSTI_PRENOTATI(
    id            NUMBER(9) NOT NULL,
    codPalinsesto NUMBER(9) NOT NULL,
-   codSala       CHAR(1)   NOT NULL,
-   codCinema       CHAR(1) NOT NULL,
    codPren       NUMBER(6) NOT NULL,
    CONSTRAINT PK_STATO_POSTO 
    PRIMARY KEY(id),
@@ -151,7 +149,7 @@ CREATE TABLE FILM_IN_PROGRAMMAZIONE (
    CONSTRAINT PK_FIP
    PRIMARY KEY(id)
 )
-STORAGE (INITIAL 143500K);
+STORAGE (INITIAL 143500K)
 
 CREATE TABLE ARTISTA (
    nome     VARCHAR2(20) NOT NULL,
@@ -185,7 +183,7 @@ STORAGE (INITIAL 22500K)
 
 CREATE TABLE PRENOTAZIONI (
    id            NUMBER(6)    NOT NULL,
-   prezzo        NUMBER(3)    NOT NULL,
+   prezzo        FLOAT    NOT NULL,
    tipo          NUMBER(1)    NOT NULL,
    CHECK         (tipo=1 OR tipo=0),
    pagato        NUMBER(1)    NOT NULL,
@@ -193,8 +191,6 @@ CREATE TABLE PRENOTAZIONI (
    data          DATE         NOT NULL,
    codUser       NUMBER (4)   NOT NULL,
    codPalinsesto NUMBER(9)    NOT NULL,
-   CONSTRAINT UN_pren
-   UNIQUE     (codUser,codPalinsesto,data),
    CONSTRAINT PK_PREN
    PRIMARY KEY (id)
 )
@@ -308,19 +304,9 @@ REFERENCES PALINSESTO(id)
 ON DELETE SET NULL;
 
 ALTER TABLE POSTI_PRENOTATI
-ADD CONSTRAINT FK_PP1 FOREIGN KEY (codSala)
-REFERENCES SALA(id)
-ON DELETE SET NULL;
-
-ALTER TABLE POSTI_PRENOTATI
 ADD CONSTRAINT FK_PP2 FOREIGN KEY (codPren)
 REFERENCES PRENOTAZIONI(id)
 ON DELETE SET NULL;
-
-ALTER TABLE POSTI_PRENOTATI
-ADD CONSTRAINT FK_PP3
-FOREIGN KEY(codsala,codcinema)
-REFERENCES SALA(id,codcinema)
 
 ALTER TABLE RECENSIONE
 ADD CONSTRAINT FK_REC1 FOREIGN KEY (codUser)
@@ -339,6 +325,10 @@ INCREMENT BY 1;
 CREATE SEQUENCE review_auto_incr START WITH 1
 INCREMENT BY 1;
 
+CREATE SEQUENCE pren_auto_incr START WITH 1
+INCREMENT BY 1;
+
+
 --Trigger
 CREATE OR REPLACE TRIGGER utenti_trigger
 BEFORE INSERT ON UTENTE
@@ -352,6 +342,13 @@ BEFORE INSERT ON RECENSIONE
 FOR EACH ROW
 BEGIN
 :new.id := review_auto_incr.nextval;
+END;
+
+CREATE OR REPLACE TRIGGER prenotazioni_trigger
+BEFORE INSERT ON UTENTE
+FOR EACH ROW
+BEGIN
+:new.id := pren_auto_incr.nextval;
 END;
 
 --Query
@@ -434,4 +431,33 @@ ORDER BY data_e_ora
 SELECT Pal.id
 FROM cinemadba.PALINSESTO Pal
 WHERE Pal.codfilm='tt2277860' AND Pal.data_e_ora='zzzzz'
+
+/* dati sulla pren fatta da un utente*/
+SELECT TO_CHAR(Pren.data,'DD-MON-YYYY HH24:MI') as data,Fip.titolo as Film,Cin.nome as Cinema,Pal.codsala as sala,Pren.prezzo
+FROM ((cinemadba.Prenotazioni Pren JOIN cinemadba.Palinsesto Pal ON Pren.codpalinsesto=Pal.id)
+JOIN cinemadba.Film_in_programmazione Fip ON Pal.codfilm=Fip.id)
+JOIN cinemadba.Cinema Cin ON Cin.id=Pal.codcinema
+WHERE Pren.coduser='1'
+ORDER BY data
+
+/*posti prenotati da un utente in una determinata prenotazione*/
+SELECT COUNT(PP.id) as Seats
+FROM cinemadba.POSTI_PRENOTATI PP JOIN cinemadba.Prenotazioni Pren ON PP.codpren=Pren.id
+WHERE Pren.coduser='1' AND PP.codpren='60'
+
+/*data film cinema sala e prezzo riguardo tutte le prenotazioni effettuate da un utente*/
+SELECT TO_CHAR(Pren.data,'DD-MON-YYYY HH24:MI') as data,Fip.titolo as Film,Cin.nome as Cinema,Pal.codsala as sala,Pren.prezzo,Seats
+FROM (((cinemadba.Prenotazioni Pren JOIN cinemadba.Palinsesto Pal ON Pren.codpalinsesto=Pal.id)
+JOIN cinemadba.Film_in_programmazione Fip ON Pal.codfilm=Fip.id)
+JOIN cinemadba.Cinema Cin ON Cin.id=Pal.codcinema)
+JOIN (SELECT COUNT(PP.id) as Seats,PP.codPren as Pren
+FROM cinemadba.POSTI_PRENOTATI PP JOIN cinemadba.Prenotazioni Pren ON PP.codpren=Pren.id
+WHERE Pren.coduser='1'
+GROUP BY PP.codpren) ON Pren = Pren.id
+WHERE Pren.coduser='1'
+ORDER BY data
+
+/*totale prenotazioni effettuate + prezzo complessivo*/
+SELECT COUNT(*) as Nnumero_prenotazioni,Sum(pren.prezzo) as totale FROM cinemadba.PRENOTAZIONI Pren WHERE Pren.coduser='1';
+SELECT COUNT(*) as num,Sum(pren.prezzo) as total FROM cinemadba.PRENOTAZIONI Pren WHERE Pren.coduser='1'
 
